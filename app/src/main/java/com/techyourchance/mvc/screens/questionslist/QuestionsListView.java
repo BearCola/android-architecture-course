@@ -6,7 +6,7 @@ import com.techyourchance.mvc.questions.Question;
 
 import java.util.List;
 
-interface QuestionsListViewMvc {
+interface QuestionsListView {
 
     public interface Listener {
         void onQuestionClicked(Question question);

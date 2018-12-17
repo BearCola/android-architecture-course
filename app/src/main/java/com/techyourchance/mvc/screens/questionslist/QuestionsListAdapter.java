@@ -12,52 +12,41 @@ import android.widget.TextView;
 import com.techyourchance.mvc.R;
 import com.techyourchance.mvc.questions.Question;
 
-public class QuestionsListAdapter extends ArrayAdapter<Question> {
-
-    private final OnQuestionClickListener mOnQuestionClickListener;
+public class QuestionsListAdapter extends ArrayAdapter<Question> implements QuestionsListItemView.Listener {
 
     public interface OnQuestionClickListener {
         void onQuestionClicked(Question question);
     }
 
+    private final OnQuestionClickListener onQuestionClickListener;
+
     public QuestionsListAdapter(Context context,
                                 OnQuestionClickListener onQuestionClickListener) {
         super(context, 0);
-        mOnQuestionClickListener = onQuestionClickListener;
-    }
-
-    private static class ViewHolder {
-        private TextView tvTitle;
+        this.onQuestionClickListener = onQuestionClickListener;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.layout_question_list_item, parent, false);
 
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.tvTitle = convertView.findViewById(R.id.txt_title);
+        if (convertView == null) {
+            QuestionsListItemView questionsListItemView = new QuestionsListItemViewImpl(LayoutInflater.from(getContext()), parent);
+            questionsListItemView.registerListener(this);
+            convertView = questionsListItemView.getRootView();
+            convertView.setTag(questionsListItemView);
         }
 
         final Question question = getItem(position);
 
-        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.tvTitle.setText(question.getTitle());
-
-        // set listener
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onQuestionClicked(question);
-            }
-        });
+        QuestionsListItemView questionsListItemView = (QuestionsListItemView) convertView.getTag();
+        questionsListItemView.bindQuestion(question);
 
         return convertView;
     }
 
-    private void onQuestionClicked(Question question) {
-        mOnQuestionClickListener.onQuestionClicked(question);
+    @Override
+    public void onQuestionClicked(Question question) {
+        onQuestionClickListener.onQuestionClicked(question);
     }
 }

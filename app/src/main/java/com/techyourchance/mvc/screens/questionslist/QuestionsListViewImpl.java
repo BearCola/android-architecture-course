@@ -13,7 +13,7 @@ import com.techyourchance.mvc.questions.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsListViewMvcImpl implements QuestionsListAdapter.OnQuestionClickListener, QuestionsListViewMvc {
+public class QuestionsListViewImpl implements QuestionsListAdapter.OnQuestionClickListener, QuestionsListView {
 
     private ListView listViewQuestions;
     private QuestionsListAdapter questionsListAdapter;
@@ -22,7 +22,7 @@ public class QuestionsListViewMvcImpl implements QuestionsListAdapter.OnQuestion
 
     private final List<Listener> listeners = new ArrayList<>(1);
 
-    public QuestionsListViewMvcImpl(LayoutInflater layoutInflater, @Nullable ViewGroup parent) {
+    public QuestionsListViewImpl(LayoutInflater layoutInflater, @Nullable ViewGroup parent) {
         rootView = layoutInflater.inflate(R.layout.layout_questions_list, parent, false);
 
         listViewQuestions = findViewById(R.id.lst_questions);
